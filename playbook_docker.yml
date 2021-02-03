@@ -1,0 +1,17 @@
+---
+- name: Install default Docker
+  hosts: rent_crm_services
+  become: yes
+
+  tasks:
+  - name: Install net-tools
+    apt: name=net-tools state=latest
+  
+  - name: Install midnight comander
+    apt: name=mc state=latest
+
+  - name: Install docker.io
+    apt: name=docker.io state=latest
+
+  - name: Start Docker and Enable it on boot
+    service: name=docker state=started enabled=yes

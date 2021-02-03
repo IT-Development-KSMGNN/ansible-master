@@ -1,0 +1,15 @@
+[rent_crm_services]
+rent_crm ansible_host=rent-crm
+
+[postgresql_db]
+rent_crm_db ansible_host=landlord-portal
+
+[jenkins_server]
+jenkins-master ansible_host=10.0.20.50
+
+[default:children]
+rent_crm_services
+postgresql_db
+jenkins_server
+
+

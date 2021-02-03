@@ -1,0 +1,58 @@
+---
+ - name: Install jenkins to host
+   hosts: jenkins_server
+   become: yes
+
+   tasks:
+   - name: Get key for repository
+     apt_key: 
+          url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+          state: present
+
+   - name: App repository
+     apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable binary/
+        state: present            
+     
+   - name: install Java
+     apt: 
+        name: openjdk-11-jdk
+        state: present
+        update_cache: yes
+
+   - name: Install Jenkins
+     apt:
+        name: jenkins 
+        state: latest
+        update_cache: yes
+     notify:
+         - Jenkins Start
+         - Jenkins Startup
+
+   - name: Install docker.io
+     apt:
+        name: docker.io
+        state: latest
+        update_cache: yes
+     notify:
+         - Docker Start
+         - Docker Startup
+
+   - name: Restart docker service
+     action: service name=docker state=restarted
+
+   - name: Restart jenkins service
+     action: service name=docker state=restarted
+
+   handlers:
+   - name: Jenkins Start
+     service: name=jenkins state=started
+
+   - name: Jenkins Startup
+     service: name=jenkins enabled=yes
+
+   - name: Docker Start
+     service: name=docker state=started
+
+   - name: Docker Startup
+     service: name=docker enabled=yes 
